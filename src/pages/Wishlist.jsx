@@ -2,10 +2,28 @@ import React from 'react'
 import Header from './components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { removeItem } from '../redux/slice/wishlistSlice'
+import { addToCart } from '../redux/slice/cartSlice'
 
 const Wishlist = () => {
+  const userCart = useSelector(state=>state.cartReducer)
   const dispatch = useDispatch()
   const userWishlist = useSelector(state=>state.wishlistReducer)
+
+
+  const handleCart =(product)=>{
+    dispatch(removeItem(product.id))
+    const existingProduct = userCart?.find(item=>item?.id==product.id)
+    if(existingProduct){
+      alert("Produst Quantity is incrementing In your cart ")
+    }else{
+      alert("Produst added to your cart") 
+  
+    }
+  }
+
+
+
+
   return (
   <>
   <Header/>
@@ -24,7 +42,7 @@ const Wishlist = () => {
         <h3 className='text-xl font-bold'>{product?.title}</h3>
        <div className='flex justify-evenly mt-3'>
         <button onClick={()=>dispatch(removeItem(product?.id))}  className='text-xl'><i className='fa solid fa-heart-circle-xmark text-red-500'></i></button>
-        <button className='text-xl'><i className='fa solid fa-cart-plus text-green-700'></i></button>
+        <button onClick={()=>handleCart(product)} className='text-xl'><i className='fa solid fa-cart-plus text-green-700'></i></button>
        </div>
       </div>
     </div>
@@ -35,7 +53,8 @@ const Wishlist = () => {
   </>
   :
   <div className='flex flex-col justify-center items-center'>
-    <img   src="https://www.jyotistores.in/assets/img/empty_cart.png" alt="" />
+    <img className='w-100 h-1/2'  src="https://www.navkaardryfruits.com/images/logo/empty-cart.png" alt="" />
+    <h1 className='text-4xl text-red-600 mt-3' >Your Wishlist is empty</h1>
   </div>
   }
  </div>
